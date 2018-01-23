@@ -118,7 +118,7 @@ def checkPasswdSize(password)
 
   if password.length >= $min && password.length <= $max
 
-    puts password
+    puts password.chomp
 
   end
 
@@ -203,7 +203,7 @@ def wordFullDate(word) #
   end
 end
 
-def wordSpecialDate(word) #
+def wordSpecialDate(word) # AQUI
 
   if $date == true && $special == true 
   
@@ -320,12 +320,12 @@ if $insane == true
 
       elsif times == 1 && $upcase == true
 
-        checkPasswdSize("#{line.upcase!.chomp}")
+        checkPasswdSize("#{line.upcase!}")
         mangler(line)
 
       elsif times == 2 && $capitalize == true
 
-        checkPasswdSize("#{line.capitalize!.chomp}")
+        checkPasswdSize("#{line.capitalize!}")
         mangler(line)
 
       end
