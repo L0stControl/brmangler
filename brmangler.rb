@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-
 require 'date'
 require 'active_support/all'
 require 'colorize'
@@ -8,7 +7,6 @@ require 'optparse'
 require 'fileutils'
 require 'timeout'
 require 'find'
-
 
 logo = '
    
@@ -20,7 +18,6 @@ logo = '
    ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝
          Brazilian wordlist generator hu3hu3hu3                                                                           
 '.red
-
 
 options = {:file => nil, :min => 1, :max => 20, :leet => true, :insane => false, :cap => true, :upcase => true, :date => true, :special => true, :two => false, :qt => false}
 
@@ -35,7 +32,7 @@ parser = OptionParser.new do|opts|
         options[:min] = min.to_i
     end
 
-    opts.on('-M', '--Max 12', 'Mximun password size') do |max|
+    opts.on('-M', '--Max 12', 'Maximun password size') do |max|
         options[:max] = max.to_i
     end
 
@@ -127,25 +124,6 @@ def checkPasswdSize(password)
 
 end
 
-def leetSpeak(word)
-
-  if $leet == true
-  
-    originalWord = word.downcase.clone
-    originalWord2 = word.downcase.clone
-
-    REPLACEMENTS1.each {|rep| originalWord.gsub!(rep[0], rep[1])}
-
-        checkPasswdSize("#{originalWord.chomp}")
-
-    REPLACEMENTS2.each {|rep| originalWord2.gsub!(rep[0], rep[1])}
-
-        checkPasswdSize("#{originalWord2.chomp}")
-
-  end
-
-end
-
 
 def wordSpecial(word)
   
@@ -155,6 +133,12 @@ def wordSpecial(word)
 
       checkPasswdSize(word.chomp + SPECIAL[times])
       checkPasswdSize(SPECIAL[times] + word.chomp)
+      
+      (SPECIAL.length).times do |times2|
+        
+        checkPasswdSize(SPECIAL[times] + word.chomp + SPECIAL[times2])
+     
+      end
 
     end
 
@@ -162,11 +146,11 @@ def wordSpecial(word)
 
 end
 
-def wordSpecialNum(word)   #21000000
+def wordSpecialNum(word)
 
     (SPECIAL.length).times do |times|  
 
-      (0..999999).each do |num|
+      (0..9999).each do |num|
 
         checkPasswdSize("#{num}#{word.chomp}#{SPECIAL[times]}")
         checkPasswdSize("#{SPECIAL[times]}#{word.chomp}#{num}")
@@ -180,7 +164,7 @@ end
 
 def wordNum(word)
   
-  (0..999999).each do |num|
+  (0..9999).each do |num|
 
     checkPasswdSize("#{num}#{word.chomp}")
     checkPasswdSize("#{word.chomp}#{num}") 
@@ -190,22 +174,17 @@ def wordNum(word)
 end
 
 
-def wordDate(word)
+def wordDate(word) #
 
   if $date == true
   
-    (1..9).each do |day|
-      
-      (1..12).each do |month|
-      
-        (1..99).each do |year|
-      
-          checkPasswdSize("#{day.to_s.rjust(2, '0')}#{month.to_s.rjust(2, '0')}#{year.to_s.rjust(2, '0')}#{word.chomp}")
-          checkPasswdSize("#{word.chomp}#{day.to_s.rjust(2, '0')}#{month.to_s.rjust(2, '0')}#{year.to_s.rjust(2, '0')}")
-      
-        end
+    rangeDate = ((70.to_i.year.ago.to_date)..(Date.today)).to_a.map{|x| x.to_s(:db)} # 70 years 
+      rangeDate.each do |date|
+        dateMask = date.split("-")
+
+        checkPasswdSize("#{word.chomp}#{dateMask[2]}#{dateMask[1]}#{dateMask[0][2..4]}")
+
       end
-    end
   end
 end
 
@@ -214,31 +193,33 @@ def wordFullDate(word) #
 
   if $date == true
   
-    rangeDate = ((60.to_i.year.ago.to_date)..(Date.today)).to_a.map{|x| x.to_s(:db)} # 60 years 
+    rangeDate = ((70.to_i.year.ago.to_date)..(Date.today)).to_a.map{|x| x.to_s(:db)} # 70 years 
       rangeDate.each do |date|
         dateMask = date.split("-")
+        
         checkPasswdSize("#{word.chomp}#{dateMask[2]}#{dateMask[1]}#{dateMask[0][0..4]}")
-        checkPasswdSize("#{dateMask[2]}#{dateMask[1]}#{dateMask[0][0..4]}")
+
       end
   end
 end
 
-def wordSpecialDate(word) #
+def wordSpecialDate(word) # AQUI
 
-  if $date == true  
+  if $date == true && $special == true 
   
     (SPECIAL.length).times do |times|
-      (1..9).each do |day|
-        (1..12).each do |month|
-          (50..99).each do |year|
-            checkPasswdSize("#{day.to_s.rjust(2, '0')}#{month.to_s.rjust(2, '0')}#{year}#{SPECIAL[times]}#{word.chomp}")
-            checkPasswdSize("#{word.chomp}#{SPECIAL[times]}#{day.to_s.rjust(2, '0')}#{month.to_s.rjust(2, '0')}#{year}")
-          end
-        end
+      rangeDate = ((70.to_i.year.ago.to_date)..(Date.today)).to_a.map{|x| x.to_s(:db)} # 70 years
+      rangeDate.each do |date|
+  
+        dateMask = date.split("-")        
+        checkPasswdSize("#{word.chomp}#{SPECIAL[times]}#{dateMask[2]}#{dateMask[1]}#{dateMask[0][0..4]}")
+        checkPasswdSize("#{dateMask[2]}#{dateMask[1]}#{dateMask[0][0..4]}#{SPECIAL[times]}#{word.chomp}")
+        checkPasswdSize("#{word.chomp}#{SPECIAL[times]}#{dateMask[2]}#{dateMask[1]}#{dateMask[0][2..4]}")
+        checkPasswdSize("#{dateMask[2]}#{dateMask[1]}#{dateMask[0][2..4]}#{SPECIAL[times]}#{word.chomp}")
+        
       end
     end
   end
-
 end
 
 def twoLetters
@@ -255,13 +236,39 @@ def twoLetters
 end
 
 
+def leetSpeak(word)
+
+  if $leet == true
+  
+    originalWord = word.downcase.clone
+    originalWord2 = word.downcase.clone
+
+    REPLACEMENTS1.each {|rep| originalWord.gsub!(rep[0], rep[1])}
+
+        checkPasswdSize("#{originalWord.chomp}")
+        wordSpecial("#{originalWord.chomp}")
+        wordNum("#{originalWord.chomp}")
+
+    REPLACEMENTS2.each {|rep| originalWord2.gsub!(rep[0], rep[1])}
+
+        wordSpecial("#{originalWord2.chomp}")
+        checkPasswdSize("#{originalWord2.chomp}")
+        wordNum("#{originalWord2.chomp}")
+
+  end
+
+end
+
+
 def mangler(word)
+
   wordSpecial(word)
   wordSpecialNum(word)
+  wordSpecialDate(word)
   wordNum(word)
   wordDate(word)
   wordFullDate(word)
-  wordSpecialDate(word)
+
 end
 
 # Main
@@ -276,14 +283,14 @@ inputData.each_line do |line|
       checkPasswdSize("#{line.downcase!}")
       mangler(line)
 
-    elsif times == 1 && $upcase == true
-
-      checkPasswdSize("#{line.upcase!.chomp}")
-      mangler(line)
-
-    elsif times == 2 && $capitalize == true
+    elsif times == 1 && $capitalize == true
 
       checkPasswdSize("#{line.capitalize!.chomp}")
+      mangler(line)
+
+    elsif times == 2 && $upcase == true
+
+      checkPasswdSize("#{line.upcase!.chomp}")
       mangler(line)
 
     end
@@ -327,4 +334,3 @@ if $insane == true
     end
   end
 end
-
