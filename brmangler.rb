@@ -203,7 +203,7 @@ def wordFullDate(word) #
   end
 end
 
-def wordSpecialDate(word) # AQUI
+def wordSpecialDate(word) #
 
   if $date == true && $special == true 
   
