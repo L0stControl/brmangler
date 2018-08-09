@@ -127,7 +127,6 @@ catania
 catuense
 caversham
 caxias
-caykurrizespor
 ceara
 ceilandia
 celtade
@@ -144,8 +143,6 @@ chelsea
 chemnitzer
 chepo
 chievo
-chivasguadalajara
-chornomoretsodessa
 chorrillo
 cienciano
 cittadella
@@ -154,6 +151,7 @@ cobreloa
 colocolo
 colo-colo
 colon
+colorado
 comercial
 cordoba
 corinthians
@@ -924,6 +922,7 @@ treze
 tricordiano
 trindade
 trio
+tricolor
 trofense
 troyes
 trujillanos
@@ -996,6 +995,7 @@ veracruz
 veranopolis
 veria
 verona
+verdao
 vfbstuttgart
 viana
 vicenzacalcio
