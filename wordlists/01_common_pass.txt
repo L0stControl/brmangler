@@ -27,7 +27,6 @@ password1
 abc123
 123abc
 teste123
-linked
 666666
 123123
 iloveyou
