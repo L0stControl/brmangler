@@ -52,16 +52,16 @@ parser = OptionParser.new do|opts|
         options[:date] = false
     end
  
-    opts.on('-j', '--months', 'DISABLE months (e.g. "janeiro@020212")') do |date|
-      options[:months] = true
-    end
-
     opts.on('-s', '--special', 'DISABLE passwords with special characters') do |special|
         options[:special] = false
     end
 
     opts.on('-t', '--twoletters', 'Enable two letters passwords (e.g. "af212303")'.red) do |two|
         options[:two] = true
+    end
+
+    opts.on('-j', '--months', 'Enable months (e.g. "janeiro@020212")'.red) do |date|
+      options[:months] = true
     end
 
     opts.on('-i', '--insane', 'Use *ALL* wordlists to create passwords'.red) do |insane|
