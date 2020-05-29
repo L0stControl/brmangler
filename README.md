@@ -1,6 +1,6 @@
    
-         Brazilian wordlist generator hu3hu3hu3                                                                           
-
+         Brazilian wordlist generator hu3hu3hu3       
+         
 Usage: ./brmangler.rb [options]
 
     -f, --file /path/to/file         *Mandatory* File with names
