@@ -108,7 +108,6 @@ $months = options[:months]
 # Functions
 
 def wordSpecial(word)
-
   if $special == true && word.length + 1 >= $min && word.length + 1 <= $max
     (SPECIAL.length).times do |times|
       puts word + SPECIAL[times]
@@ -125,7 +124,6 @@ def wordSpecial(word)
 end
 
 def wordSpecialNum(word)
-
   if word.length + 3 <= $max
     (SPECIAL.length).times do |times|
       (0..99).each do |num|
@@ -172,7 +170,6 @@ end
 def wordDate(word)
 
   if $date == true && word.length + 6 >= $min && word.length + 6 <= $max
-  
     rangeDate = ((60.to_i.year.ago.to_date)..(Date.today)).to_a.map{|x| x.to_s(:db)} # 60 years 
       rangeDate.each do |date|
         dateMask = date.split("-")
@@ -181,11 +178,8 @@ def wordDate(word)
   end
 end
 
-
 def wordFullDate(word)
-
   if $date == true && word.length + 8 >= $min && word.length + 8 <= $max
-  
     rangeDate = ((60.to_i.year.ago.to_date)..(Date.today)).to_a.map{|x| x.to_s(:db)} # 60 years 
       rangeDate.each do |date|
         dateMask = date.split("-")
@@ -195,9 +189,7 @@ def wordFullDate(word)
 end
 
 def wordSpecialDate(word)
-
   if $date == true && $special == true && word.length + 7 >= $min
-  
     (SPECIAL.length).times do |times|
       rangeDate = ((60.to_i.year.ago.to_date)..(Date.today)).to_a.map{|x| x.to_s(:db)} # 60 years
       rangeDate.each do |date|
@@ -216,17 +208,13 @@ def wordSpecialDate(word)
 end
 
 def monthSpecialDate(word)
-
   if $date == true && $special == true
-  
     (SPECIAL.length).times do |times|
       rangeDate = ((10.to_i.year.ago.to_date)..(Date.today)).to_a.map{|x| x.to_s(:db)} # 10 years
       rangeDate.each do |date|
-  
         dateMask = date.split("-")        
         puts "#{word}#{SPECIAL[times]}#{dateMask[2]}#{dateMask[1]}#{dateMask[0][2..4]}"
         puts "#{dateMask[2]}#{dateMask[1]}#{dateMask[0][2..4]}#{SPECIAL[times]}#{word}"
-        
       end
     end
   end
@@ -234,7 +222,6 @@ end
 
 
 def twoLetters
-  
   if $two == true
     ("aa".."zz").each do |letter|
       (1..999999).each do |num|
@@ -243,46 +230,40 @@ def twoLetters
       end 
     end
   end
-
 end
 
 
 def leetSpeak(word)
-
   if $leet == true && word.length >= $min && word.length <= $max
-  
     originalWord = word.downcase.clone
     originalWord2 = word.downcase.clone
     puts originalWord
-    
+  
     REPLACEMENTS1.each {|rep| originalWord.gsub!(rep[0], rep[1])}
-
-        puts originalWord
-        wordSpecial(originalWord)
-        wordNum(originalWord)
+       puts originalWord
+       wordSpecial(originalWord)
+       wordNum(originalWord)
 
     REPLACEMENTS2.each {|rep| originalWord2.gsub!(rep[0], rep[1])}
-
-        puts originalWord2
-        wordSpecial(originalWord2)
-        wordNum(originalWord2)
-
+      puts originalWord2
+      wordSpecial(originalWord2)
+      wordNum(originalWord2)
   end
 end
 
 
 def mangler(word)
-
   wordSpecial(word)
   wordSpecialNum(word)
   wordSpecialDate(word)
   wordNum(word)
   wordDate(word)
   wordFullDate(word)
-
 end
 
-# Main
+########
+# Main #
+########
 
 if $months == true
   MONTHS.each do |month| 
@@ -298,24 +279,18 @@ inputData.each_line do |line|
 
   (3).times do |times|
     if times == 0 
-      
       mangler(line)
-
     elsif times == 1 && $capitalize == true 
-      
       if line.length >= $min && line.length <= $max
         puts line.capitalize!
       end
       mangler(line.capitalize!)
-
     elsif times == 2 && $upcase == true
       if line.length >= $min && line.length <= $max
         puts line.upcase!
       end
       mangler(line.upcase!)
-
     end
-    
   end
 end
 
@@ -330,28 +305,19 @@ if $insane == true
     inputData = inputFile.read
     inputFile.close 
     inputData.each_line do |line|
-      
       leetSpeak(line)
-
       (3).times do |times|
-      if times == 0
-
-        puts line.downcase!
-        mangler(line)
-
-      elsif times == 1 && $upcase == true
-
-        puts line.upcase!
-        mangler(line)
-
-      elsif times == 2 && $capitalize == true
-
-        puts line.capitalize!
-        mangler(line)
-
+        if times == 0
+          puts line.downcase!
+          mangler(line)
+        elsif times == 1 && $upcase == true
+          puts line.upcase!
+          mangler(line)
+        elsif times == 2 && $capitalize == true
+          puts line.capitalize!
+          mangler(line)
+        end
       end
-    
-  end
     end
   end
 end
