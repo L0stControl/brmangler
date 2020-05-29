@@ -19,7 +19,7 @@ logo = '
          Brazilian wordlist generator hu3hu3hu3                                                                           
 '.red
 
-options = {:file => nil, :min => 1, :max => 20, :leet => true, :insane => false, :cap => true, :upcase => true, :date => true, :special => true, :months => true, :two => false}
+options = {:file => nil, :min => 1, :max => 20, :leet => true, :insane => false, :cap => true, :upcase => true, :date => true, :special => true, :months => false, :two => false}
 
 parser = OptionParser.new do|opts|
     opts.banner = "\n Usage: ./brmangler.rb [options]\n\n"
@@ -53,7 +53,7 @@ parser = OptionParser.new do|opts|
     end
  
     opts.on('-j', '--months', 'DISABLE months (e.g. "janeiro@020212")') do |date|
-      options[:months] = false
+      options[:months] = true
     end
 
     opts.on('-s', '--special', 'DISABLE passwords with special characters') do |special|
@@ -124,7 +124,7 @@ def wordSpecial(word)
 end
 
 def wordSpecialNum(word)
-  if word.length + 3 <= $max
+    if word.length + 3 <= $max
     (SPECIAL.length).times do |times|
       (0..99).each do |num|
         if word.length + num.to_s.length + 1 >= $min
@@ -279,17 +279,17 @@ inputData.each_line do |line|
 
   (3).times do |times|
     if times == 0 
-      mangler(line)
+      mangler("#{line.downcase}")
     elsif times == 1 && $capitalize == true 
       if line.length >= $min && line.length <= $max
-        puts line.capitalize!
+        puts line.capitalize
       end
-      mangler(line.capitalize!)
+      mangler("#{line.capitalize}")
     elsif times == 2 && $upcase == true
       if line.length >= $min && line.length <= $max
         puts line.upcase!
       end
-      mangler(line.upcase!)
+      mangler("#{line.upcase}")
     end
   end
 end
